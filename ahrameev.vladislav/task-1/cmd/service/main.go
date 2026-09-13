@@ -16,7 +16,10 @@ func main() {
 		return
 	}
 
-	fmt.Scan(&operator)
+	if _, err := fmt.Scan(&operator); err != nil {
+		fmt.Println("Invalid operation")
+		return
+	}
 
 	switch operator {
 	case "+":
