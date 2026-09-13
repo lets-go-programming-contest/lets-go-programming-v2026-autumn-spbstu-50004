@@ -4,9 +4,20 @@ import "fmt"
 
 func main() {
 	var a, b int
+	var operator string
 
 	fmt.Scan(&a)
 	fmt.Scan(&b)
+	fmt.Scan(&operator)
 
-	fmt.Println(a, b)
+	switch operator {
+	case "+":
+		fmt.Println(a + b)
+	case "-":
+		fmt.Println(a - b)
+	case "*":
+		fmt.Println(a * b)
+	case "/":
+		fmt.Println(a / b)
+	}
 }
