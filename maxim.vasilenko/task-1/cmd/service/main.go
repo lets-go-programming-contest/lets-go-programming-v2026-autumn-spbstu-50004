@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	var op1Str, operator, op2Str string
+	var op1Str, op2Str, operator string
 
 	if _, err := fmt.Scan(&op1Str); err != nil {
 		return
@@ -17,20 +17,20 @@ func main() {
 		return
 	}
 
-	if _, err := fmt.Scan(&operator); err != nil {
-		return
-	}
-	if operator != "+" && operator != "-" && operator != "*" && operator != "/" {
-		fmt.Println("Invalid operation")
-		return
-	}
-
 	if _, err := fmt.Scan(&op2Str); err != nil {
 		return
 	}
 	op2, err := strconv.Atoi(op2Str)
 	if err != nil {
 		fmt.Println("Invalid second operand")
+		return
+	}
+
+	if _, err := fmt.Scan(&operator); err != nil {
+		return
+	}
+	if operator != "+" && operator != "-" && operator != "*" && operator != "/" {
+		fmt.Println("Invalid operation")
 		return
 	}
 
