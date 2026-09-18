@@ -7,13 +7,25 @@ func main() {
 	var operation string
 
 	fmt.Print("Enter first number ")
-	fmt.Scan(&a)
+	_, err := fmt.Scan(&a)
+	if err != nil {
+		fmt.Println("Invalid input")
+		return
+	}
 
 	fmt.Print("Enter operation ")
-	fmt.Scan(&operation)
+	_, err = fmt.Scan(&operation)
+	if err != nil {
+		fmt.Println("Invalid operation")
+		return
+	}
 
 	fmt.Print("Enter second number ")
-	fmt.Scan(&b)
+	_, err = fmt.Scan(&b)
+	if err != nil {
+		fmt.Println("Invalid output")
+		return
+	}
 
 	switch operation {
 
@@ -29,8 +41,10 @@ func main() {
 	case "/":
 		if b == 0 {
 			fmt.Println("Division by zero")
+			return
 		} else {
-			fmt.Println(a / b)
+			fmt.Println(float64(a) / float64(b))
+			return
 		}
 
 	default:
