@@ -30,6 +30,10 @@ func main() {
 	case "*":
 		fmt.Println(op1 * op2)
 	case "/":
+		if op2 == 0 {
+			fmt.Println("Division by zero")
+			return
+		}
 		fmt.Println(op1 / op2)
 	default:
 		fmt.Println("Invalid operation")
