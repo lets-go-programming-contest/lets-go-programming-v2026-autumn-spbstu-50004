@@ -21,4 +21,17 @@ func main() {
 	}
 
 	fmt.Scan(&operation)
+
+	switch operation {
+	case "+":
+		fmt.Println(op1 + op2)
+	case "-":
+		fmt.Println(op1 - op2)
+	case "*":
+		fmt.Println(op1 * op2)
+	case "/":
+		fmt.Println(op1 / op2)
+	default:
+		fmt.Println("Invalid operation")
+	}
 }
