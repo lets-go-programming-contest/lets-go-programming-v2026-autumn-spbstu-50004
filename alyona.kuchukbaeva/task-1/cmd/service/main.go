@@ -5,7 +5,7 @@ import "fmt"
 func main() {
 	var (
 		a, b int
-		op string
+		op   string
 	)
 
 	if _, err := fmt.Scanln(&a); err != nil {
