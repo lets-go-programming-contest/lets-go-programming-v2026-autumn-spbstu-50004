@@ -6,21 +6,21 @@ import (
 )
 
 func main() {
-	var op1Str, op2Str, operator string
+	var firstOperandStr, secondOperandStr, operator string
 
-	if _, err := fmt.Scan(&op1Str); err != nil {
+	if _, err := fmt.Scan(&firstOperandStr); err != nil {
 		return
 	}
-	op1, err := strconv.Atoi(op1Str)
+	firstOperand, err := strconv.Atoi(firstOperandStr)
 	if err != nil {
 		fmt.Println("Invalid first operand")
 		return
 	}
 
-	if _, err := fmt.Scan(&op2Str); err != nil {
+	if _, err := fmt.Scan(&secondOperandStr); err != nil {
 		return
 	}
-	op2, err := strconv.Atoi(op2Str)
+	secondOperand, err := strconv.Atoi(secondOperandStr)
 	if err != nil {
 		fmt.Println("Invalid second operand")
 		return
@@ -29,23 +29,24 @@ func main() {
 	if _, err := fmt.Scan(&operator); err != nil {
 		return
 	}
+
 	if operator != "+" && operator != "-" && operator != "*" && operator != "/" {
 		fmt.Println("Invalid operation")
+		return
+	}
+	if operator == "/" && secondOperand == 0 {
+		fmt.Println("Division by zero")
 		return
 	}
 
 	switch operator {
 	case "+":
-		fmt.Println(op1 + op2)
+		fmt.Println(firstOperand + secondOperand)
 	case "-":
-		fmt.Println(op1 - op2)
+		fmt.Println(firstOperand - secondOperand)
 	case "*":
-		fmt.Println(op1 * op2)
+		fmt.Println(firstOperand * secondOperand)
 	case "/":
-		if op2 == 0 {
-			fmt.Println("Division by zero")
-			return
-		}
-		fmt.Println(op1 / op2)
+		fmt.Println(firstOperand / secondOperand)
 	}
 }
