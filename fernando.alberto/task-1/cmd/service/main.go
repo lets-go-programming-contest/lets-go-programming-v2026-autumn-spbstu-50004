@@ -18,5 +18,10 @@ func readInt(scanner *bufio.Scanner, errorMsg string) (int, bool) {
 	return value, true
 }
 
+func readOperation(scanner *bufio.Scanner) string {
+	scanner.Scan()
+	return strings.TrimSpace(scanner.Text())
+}
+
 func main() {
 }
