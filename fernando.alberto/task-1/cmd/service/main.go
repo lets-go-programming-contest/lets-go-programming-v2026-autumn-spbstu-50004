@@ -23,5 +23,25 @@ func readOperation(scanner *bufio.Scanner) string {
 	return strings.TrimSpace(scanner.Text())
 }
 
+func calculate(first, second int, op string) (int, bool) {
+	switch op {
+	case "+":
+		return first + second, true
+	case "-":
+		return first - second, true
+	case "*":
+		return first * second, true
+	case "/":
+		if second == 0 {
+			fmt.Println("Division by zero")
+			return 0, false
+		}
+		return first / second, true
+	default:
+		fmt.Println("Invalid operation")
+		return 0, false
+	}
+}
+
 func main() {
 }
