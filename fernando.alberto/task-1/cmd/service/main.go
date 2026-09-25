@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -44,4 +45,24 @@ func calculate(first, second int, op string) (int, bool) {
 }
 
 func main() {
+	scanner := bufio.NewScanner(os.Stdin)
+
+	first, ok := readInt(scanner, "Invalid first operand")
+	if !ok {
+		return
+	}
+
+	second, ok := readInt(scanner, "Invalid second operand")
+	if !ok {
+		return
+	}
+
+	op := readOperation(scanner)
+
+	result, ok := calculate(first, second, op)
+	if !ok {
+		return
+	}
+
+	fmt.Printf("%d\n", result)
 }
