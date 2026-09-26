@@ -34,6 +34,12 @@ func main() {
 	case "*":
 		fmt.Println(a * b)
 	case "/":
-		fmt.Println(a / b)
+		if b == 0 {
+			fmt.Println("Division by zero")
+		} else {
+			fmt.Println(a / b)
+		}
+	default:
+		fmt.Println("Invalid operation")
 	}
 }
