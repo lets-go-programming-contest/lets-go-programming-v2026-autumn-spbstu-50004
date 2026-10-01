@@ -3,8 +3,10 @@ package main
 import "fmt"
 
 func main() {
-	var a, b int
-	var operator string
+	var (
+		a, b     int
+		operator string
+	)
 
 	if _, err := fmt.Scan(&a); err != nil {
 		fmt.Println("Invalid first operand")
