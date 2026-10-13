@@ -18,6 +18,7 @@ func updateTemperatureBounds(operation string, targetTemp int, currentMin, curre
 			currentMax = targetTemp
 		}
 	}
+
 	return currentMin, currentMax
 }
 
@@ -37,6 +38,7 @@ func processDepartment() {
 			operation  string
 			targetTemp int
 		)
+
 		if _, err := fmt.Scan(&operation, &targetTemp); err != nil {
 			break
 		}
