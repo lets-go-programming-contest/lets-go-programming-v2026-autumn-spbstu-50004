@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 const (
 	minTemp = 15
 	maxTemp = 30
@@ -31,5 +33,35 @@ func (c *conditioner) optimal() (int, bool) {
 }
 
 func main() {
+	var departments int
+	if _, err := fmt.Scan(&departments); err != nil {
+		return
+	}
 
+	for range departments {
+		var employees int
+		if _, err := fmt.Scan(&employees); err != nil {
+			return
+		}
+
+		cond := newConditioner()
+
+		for range employees {
+			var (
+				sign  string
+				value int
+			)
+			if _, err := fmt.Scan(&sign, &value); err != nil {
+				return
+			}
+
+			cond.apply(sign, value)
+
+			if temp, ok := cond.optimal(); ok {
+				fmt.Println(temp)
+			} else {
+				fmt.Println(-1)
+			}
+		}
+	}
 }
