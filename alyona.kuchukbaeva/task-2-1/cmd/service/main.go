@@ -29,6 +29,7 @@ func (c *conditioner) optimal() (int, bool) {
 	if c.low > c.high {
 		return 0, false
 	}
+
 	return c.low, true
 }
 
@@ -51,6 +52,7 @@ func main() {
 				sign  string
 				value int
 			)
+
 			if _, err := fmt.Scan(&sign, &value); err != nil {
 				return
 			}
