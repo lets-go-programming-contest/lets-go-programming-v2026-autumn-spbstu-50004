@@ -19,13 +19,9 @@ func newClimateControl() climateControl {
 func (c *climateControl) update(sign string, value int) int {
 	switch sign {
 	case ">=":
-		if value > c.low {
-			c.low = value
-		}
+		c.low = max(c.low, value)
 	case "<=":
-		if value < c.high {
-			c.high = value
-		}
+		c.high = min(c.high, value)
 	}
 
 	if c.low > c.high {
