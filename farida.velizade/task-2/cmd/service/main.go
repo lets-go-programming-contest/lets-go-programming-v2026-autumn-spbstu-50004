@@ -16,6 +16,25 @@ func newClimateControl() climateControl {
 	return climateControl{low: defaultLow, high: defaultHigh}
 }
 
+func (c *climateControl) update(sign string, value int) int {
+	switch sign {
+	case ">=":
+		if value > c.low {
+			c.low = value
+		}
+	case "<=":
+		if value < c.high {
+			c.high = value
+		}
+	}
+
+	if c.low > c.high {
+		return -1
+	}
+
+	return c.low
+}
+
 func main() {
 	var departments int
 	if _, err := fmt.Scan(&departments); err != nil {
@@ -40,7 +59,7 @@ func main() {
 				return
 			}
 
-			fmt.Println(ctrl.low, ctrl.high)
+			fmt.Println(ctrl.update(sign, value))
 		}
 	}
 }
