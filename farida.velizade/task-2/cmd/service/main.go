@@ -2,6 +2,20 @@ package main
 
 import "fmt"
 
+const (
+	defaultLow  = 15
+	defaultHigh = 30
+)
+
+type climateControl struct {
+	low  int
+	high int
+}
+
+func newClimateControl() climateControl {
+	return climateControl{low: defaultLow, high: defaultHigh}
+}
+
 func main() {
 	var departments int
 	if _, err := fmt.Scan(&departments); err != nil {
@@ -14,6 +28,8 @@ func main() {
 			return
 		}
 
+		ctrl := newClimateControl()
+
 		for range employees {
 			var (
 				sign  string
@@ -24,7 +40,7 @@ func main() {
 				return
 			}
 
-			fmt.Println(sign, value)
+			fmt.Println(ctrl.low, ctrl.high)
 		}
 	}
 }
