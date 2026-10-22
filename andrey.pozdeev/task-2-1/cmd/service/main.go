@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 const (
 	minLimitTemp = 15
 	maxLimitTemp = 30
@@ -39,4 +41,34 @@ func (cc *climateControl) adjust(operator string, target int) int {
 	return cc.minTemp
 }
 
-func main() {}
+func main() {
+	var totalDepts int
+	if _, err := fmt.Scan(&totalDepts); err != nil {
+		fmt.Println("Invalid departments count")
+		return
+	}
+
+	for range totalDepts {
+		var totalStaff int
+		if _, err := fmt.Scan(&totalStaff); err != nil {
+			fmt.Println("Invalid employees count")
+			return
+		}
+
+		ctrl := newClimateControl()
+
+		for range totalStaff {
+			var (
+				condOperator string
+				wantedTemp   int
+			)
+
+			if _, err := fmt.Scan(&condOperator, &wantedTemp); err != nil {
+				fmt.Println("Invalid temperature constraint")
+				return
+			}
+
+			fmt.Println(ctrl.adjust(condOperator, wantedTemp))
+		}
+	}
+}
