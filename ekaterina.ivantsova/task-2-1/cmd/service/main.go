@@ -3,50 +3,54 @@ package main
 import "fmt"
 
 const (
-	DefaultMinTemp = 15
-	DefaultMaxTemp = 30
+	defaultMinTemp = 15
+	defaultMaxTemp = 30
 )
 
-func updateTemperatureBounds(operation string, targetTemp int, currentMin, currentMax int) (int, int) {
+type temperatureBounds struct {
+	min int
+	max int
+}
+
+func (t *temperatureBounds) update(operation string, targetTemp int) {
 	switch operation {
 	case ">=":
-		if targetTemp > currentMin {
-			currentMin = targetTemp
+		if targetTemp > t.min {
+			t.min = targetTemp
 		}
 	case "<=":
-		if targetTemp < currentMax {
-			currentMax = targetTemp
+		if targetTemp < t.max {
+			t.max = targetTemp
 		}
 	}
-
-	return currentMin, currentMax
 }
 
 func processDepartment() {
 	var employeesCount int
 	if _, err := fmt.Scan(&employeesCount); err != nil {
+		fmt.Println("Invalid employees count")
 		return
 	}
 
-	var (
-		currentMinTemp = DefaultMinTemp
-		currentMaxTemp = DefaultMaxTemp
-	)
+	bounds := temperatureBounds{
+		min: defaultMinTemp,
+		max: defaultMaxTemp,
+	}
 
 	for range employeesCount {
 		var (
 			operation  string
 			targetTemp int
 		)
-
 		if _, err := fmt.Scan(&operation, &targetTemp); err != nil {
+			fmt.Println("Invalid employee data")
 			break
 		}
 
-		currentMinTemp, currentMaxTemp = updateTemperatureBounds(operation, targetTemp, currentMinTemp, currentMaxTemp)
+		bounds.update(operation, targetTemp)
 
-		if currentMinTemp <= currentMaxTemp {
-			fmt.Println(currentMinTemp)
+		if bounds.min <= bounds.max {
+			fmt.Println(bounds.min)
 		} else {
 			fmt.Println(-1)
 		}
@@ -56,6 +60,7 @@ func processDepartment() {
 func main() {
 	var departmentsCount int
 	if _, err := fmt.Scan(&departmentsCount); err != nil {
+		fmt.Println("Invalid departments count")
 		return
 	}
 
