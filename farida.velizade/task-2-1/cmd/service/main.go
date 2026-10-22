@@ -5,6 +5,8 @@ import "fmt"
 const (
 	defaultLow  = 15
 	defaultHigh = 30
+	signGte     = ">="
+	signLte     = "<="
 )
 
 type climateControl struct {
@@ -18,9 +20,9 @@ func newClimateControl() climateControl {
 
 func (c *climateControl) update(sign string, value int) int {
 	switch sign {
-	case ">=":
+	case signGte:
 		c.low = max(c.low, value)
-	case "<=":
+	case signLte:
 		c.high = min(c.high, value)
 	}
 
@@ -34,12 +36,14 @@ func (c *climateControl) update(sign string, value int) int {
 func main() {
 	var departments int
 	if _, err := fmt.Scan(&departments); err != nil {
+		fmt.Println("Error reading number of departments:", err)
 		return
 	}
 
 	for range departments {
 		var employees int
 		if _, err := fmt.Scan(&employees); err != nil {
+			fmt.Println("Error reading number of employees:", err)
 			return
 		}
 
@@ -52,6 +56,7 @@ func main() {
 			)
 
 			if _, err := fmt.Scan(&sign, &value); err != nil {
+				fmt.Println("Error reading temperature parametrs:", err)
 				return
 			}
 
