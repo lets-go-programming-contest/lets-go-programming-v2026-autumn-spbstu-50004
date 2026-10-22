@@ -37,6 +37,7 @@ func main() {
 	var departments int
 	if _, err := fmt.Scan(&departments); err != nil {
 		fmt.Println("Error reading number of departments:", err)
+
 		return
 	}
 
@@ -44,6 +45,7 @@ func main() {
 		var employees int
 		if _, err := fmt.Scan(&employees); err != nil {
 			fmt.Println("Error reading number of employees:", err)
+
 			return
 		}
 
@@ -57,6 +59,7 @@ func main() {
 
 			if _, err := fmt.Scan(&sign, &value); err != nil {
 				fmt.Println("Error reading temperature parametrs:", err)
+
 				return
 			}
 
