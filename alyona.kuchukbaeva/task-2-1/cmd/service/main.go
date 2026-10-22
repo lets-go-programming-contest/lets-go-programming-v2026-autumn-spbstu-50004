@@ -3,8 +3,11 @@ package main
 import "fmt"
 
 const (
-	minTemp = 15
-	maxTemp = 30
+	minTemp  = 15
+	maxTemp  = 30
+	signLow  = ">="
+	signHigh = "<="
+	noTemp   = -1
 )
 
 type conditioner struct {
@@ -36,12 +39,16 @@ func (c *conditioner) optimal() (int, bool) {
 func main() {
 	var departments int
 	if _, err := fmt.Scan(&departments); err != nil {
+		fmt.Println("Invalid departments count")
+
 		return
 	}
 
 	for range departments {
 		var employees int
 		if _, err := fmt.Scan(&employees); err != nil {
+			fmt.Println("Invalid employees count")
+
 			return
 		}
 
@@ -54,6 +61,8 @@ func main() {
 			)
 
 			if _, err := fmt.Scan(&sign, &value); err != nil {
+				fmt.Println("Invalid temperature")
+
 				return
 			}
 
@@ -62,7 +71,7 @@ func main() {
 			if temp, ok := cond.optimal(); ok {
 				fmt.Println(temp)
 			} else {
-				fmt.Println(-1)
+				fmt.Println(noTemp)
 			}
 		}
 	}
