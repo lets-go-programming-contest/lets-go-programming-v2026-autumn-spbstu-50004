@@ -5,6 +5,9 @@ import "fmt"
 const (
 	defMinTemperature = 15
 	defMaxTemperature = 30
+	signLow           = ">="
+	signHigh          = "<="
+	noTemperature     = -1
 )
 
 type conditioner struct {
@@ -18,18 +21,18 @@ func newConditioner() conditioner {
 
 func (c *conditioner) regulate(sign string, value int) int {
 	switch sign {
-	case ">=":
+	case signLow:
 		if value > c.low {
 			c.low = value
 		}
-	case "<=":
+	case signHigh:
 		if value < c.high {
 			c.high = value
 		}
 	}
 
 	if c.low > c.high {
-		return -1
+		return noTemperature
 	}
 
 	return c.low
