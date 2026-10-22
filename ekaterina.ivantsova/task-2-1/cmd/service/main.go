@@ -29,6 +29,7 @@ func processDepartment() {
 	var employeesCount int
 	if _, err := fmt.Scan(&employeesCount); err != nil {
 		fmt.Println("Invalid employees count")
+
 		return
 	}
 
@@ -42,8 +43,10 @@ func processDepartment() {
 			operation  string
 			targetTemp int
 		)
+
 		if _, err := fmt.Scan(&operation, &targetTemp); err != nil {
 			fmt.Println("Invalid employee data")
+
 			break
 		}
 
@@ -61,6 +64,7 @@ func main() {
 	var departmentsCount int
 	if _, err := fmt.Scan(&departmentsCount); err != nil {
 		fmt.Println("Invalid departments count")
+
 		return
 	}
 
