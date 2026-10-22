@@ -45,6 +45,7 @@ func main() {
 	var totalDepts int
 	if _, err := fmt.Scan(&totalDepts); err != nil {
 		fmt.Println("Invalid departments count")
+
 		return
 	}
 
@@ -52,6 +53,7 @@ func main() {
 		var totalStaff int
 		if _, err := fmt.Scan(&totalStaff); err != nil {
 			fmt.Println("Invalid employees count")
+
 			return
 		}
 
@@ -65,6 +67,7 @@ func main() {
 
 			if _, err := fmt.Scan(&condOperator, &wantedTemp); err != nil {
 				fmt.Println("Invalid temperature constraint")
+
 				return
 			}
 
