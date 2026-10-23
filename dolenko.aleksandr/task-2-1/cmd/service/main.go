@@ -14,9 +14,9 @@ const (
 )
 
 var (
-	departmentNumberErr = errors.New("invalid department number")
-	employeesNumberErr  = errors.New("invalid employees number")
-	temperatureInputErr = errors.New("invalid temperature input")
+	ErrDepartmentNumber = errors.New("invalid department number")
+	ErrEmployeesNumber  = errors.New("invalid employees number")
+	ErrTemperatureInput = errors.New("invalid temperature input")
 )
 
 type conditioner struct {
@@ -28,7 +28,7 @@ func newConditioner() *conditioner {
 	return &conditioner{high: MaxTemp, low: MinTemp}
 }
 
-func (c *conditioner) regulate(operator string, temp int) (int, error) {
+func (c *conditioner) regulate(operator string, temp int) int {
 	switch operator {
 	case lte:
 		if temp < c.high {
@@ -41,10 +41,10 @@ func (c *conditioner) regulate(operator string, temp int) (int, error) {
 	}
 
 	if c.low > c.high {
-		return NoTemp, nil
+		return NoTemp
 	}
 
-	return c.low, nil
+	return c.low
 }
 
 func main() {
@@ -52,7 +52,7 @@ func main() {
 
 	_, err := fmt.Scan(&departamentsCount)
 	if err != nil {
-		fmt.Println(departmentNumberErr)
+		fmt.Println(ErrDepartmentNumber)
 
 		return
 	}
@@ -60,7 +60,7 @@ func main() {
 	for range departamentsCount {
 		var employeesCount int
 		if _, err := fmt.Scan(&employeesCount); err != nil {
-			fmt.Println(employeesNumberErr)
+			fmt.Println(ErrEmployeesNumber)
 
 			return
 		}
@@ -74,19 +74,12 @@ func main() {
 			)
 
 			if _, err := fmt.Scan(&operator, &temp); err != nil {
-				fmt.Println(temperatureInputErr)
+				fmt.Println(ErrTemperatureInput)
 
 				return
 			}
 
-			result, err := curCond.regulate(operator, temp)
-			if err != nil {
-				fmt.Println(err)
-
-				return
-			}
-
-			fmt.Println(result)
+			fmt.Println(curCond.regulate(operator, temp))
 		}
 	}
 }
