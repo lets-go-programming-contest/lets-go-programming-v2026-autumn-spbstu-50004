@@ -1,40 +1,72 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strconv"
+	"strings"
 )
 
 func main() {
-	var n, k int
-	fmt.Scan(&n, &k)
+	scanner := bufio.NewScanner(os.Stdin)
+	
+	if !scanner.Scan() {
+		return
+	}
+	fields := strings.Fields(scanner.Text())
+	if len(fields) < 2 {
+		return
+	}
+	
+	numDepts, err := strconv.Atoi(fields[0])
+	if err != nil {
+		return
+	}
+	
+	numEmployees, err := strconv.Atoi(fields[1])
+	if err != nil {
+		return
+	}
 
-	minTemp := make([]int, n)
-	maxTemp := make([]int, n)
-	for i := 0; i < n; i++ {
+	minTemp := make([]int, numDepts)
+	maxTemp := make([]int, numDepts)
+	for i := range minTemp {
 		minTemp[i] = 15
 		maxTemp[i] = 30
 	}
 
-	total := n * k
-	for i := 0; i < total; i++ {
-		var op string
-		var t int
-		fmt.Scan(&op, &t)
+	totalRequests := numDepts * numEmployees
+	for reqIdx := 0; reqIdx < totalRequests; reqIdx++ {
+		if !scanner.Scan() {
+			break
+		}
+		reqFields := strings.Fields(scanner.Text())
+		if len(reqFields) < 2 {
+			continue
+		}
+		
+		op := reqFields[0]
+		tempVal, err := strconv.Atoi(reqFields[1])
+		if err != nil {
+			continue
+		}
 
-		dept := i / k
+		deptIndex := reqIdx / numEmployees
 
-		if op == ">=" {
-			if t > minTemp[dept] {
-				minTemp[dept] = t
+		switch op {
+		case ">=":
+			if tempVal > minTemp[deptIndex] {
+				minTemp[deptIndex] = tempVal
 			}
-		} else if op == "<=" {
-			if t < maxTemp[dept] {
-				maxTemp[dept] = t
+		case "<=":
+			if tempVal < maxTemp[deptIndex] {
+				maxTemp[deptIndex] = tempVal
 			}
 		}
 
-		if minTemp[dept] <= maxTemp[dept] {
-			fmt.Println(minTemp[dept])
+		if minTemp[deptIndex] <= maxTemp[deptIndex] {
+			fmt.Println(minTemp[deptIndex])
 		} else {
 			fmt.Println(-1)
 		}
