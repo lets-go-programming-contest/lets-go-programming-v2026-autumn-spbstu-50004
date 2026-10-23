@@ -44,29 +44,15 @@ func main() {
 		var k int
 		fmt.Scan(&k)
 
-		lo, hi := minTemp, maxTemp
+		conditioner := NewConditioner()
 
 		for j := 0; j < k; j++ {
 			var op string
 			var value int
 			fmt.Scan(&op, &value)
 
-			switch op {
-			case ">=":
-				if value > lo {
-					lo = value
-				}
-			case "<=":
-				if value < hi {
-					hi = value
-				}
-			}
-
-			if lo <= hi {
-				fmt.Println(lo)
-			} else {
-				fmt.Println(-1)
-			}
+			conditioner.Apply(op, value)
+			fmt.Println(conditioner.Optimal())
 		}
 	}
 }
