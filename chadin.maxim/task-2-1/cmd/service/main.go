@@ -7,6 +7,15 @@ const (
 	maxTemp = 30
 )
 
+type Conditioner struct {
+	lo int
+	hi int
+}
+
+func NewConditioner() *Conditioner {
+	return &Conditioner{lo: minTemp, hi: maxTemp}
+}
+
 func main() {
 	var n int
 	fmt.Scan(&n)
