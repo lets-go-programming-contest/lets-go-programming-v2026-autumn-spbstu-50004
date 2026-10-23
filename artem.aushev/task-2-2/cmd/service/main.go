@@ -2,90 +2,60 @@ package main
 
 import (
 	"bufio"
-	"container/heap"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 )
 
-type IntHeap []int
+func readNumbers(scanner *bufio.Scanner, count int) []int {
+	nums := make([]int, 0, count)
 
-func (h *IntHeap) Len() int {
-	return len(*h)
-}
-
-func (h *IntHeap) Less(i, j int) bool {
-	return (*h)[i] < (*h)[j]
-}
-
-func (h *IntHeap) Swap(i, j int) {
-	(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
-}
-
-func (h *IntHeap) Push(x interface{}) {
-	val, ok := x.(int)
-	if !ok {
-		return
-	}
-
-	*h = append(*h, val)
-}
-
-func (h *IntHeap) Pop() interface{} {
-	old := *h
-	n := len(old)
-	x := old[n-1]
-	*h = old[:n-1]
-
-	return x
-}
-
-func processTask(scanner *bufio.Scanner) {
-	if !scanner.Scan() {
-		return
-	}
-
-	itemCount, err := strconv.Atoi(scanner.Text())
-	if err != nil || itemCount <= 0 {
-		return
-	}
-
-	numberHeap := &IntHeap{}
-	heap.Init(numberHeap)
-
-	for range itemCount {
+	for range count {
 		if !scanner.Scan() {
 			break
 		}
 
-		val, parseErr := strconv.Atoi(scanner.Text())
-		if parseErr != nil {
+		val, err := strconv.Atoi(scanner.Text())
+		if err != nil {
 			continue
 		}
 
-		heap.Push(numberHeap, val)
+		nums = append(nums, val)
 	}
 
+	return nums
+}
+
+func readSingleInt(scanner *bufio.Scanner) (int, bool) {
 	if !scanner.Scan() {
+		return 0, false
+	}
+
+	val, err := strconv.Atoi(scanner.Text())
+	if err != nil {
+		return 0, false
+	}
+
+	return val, true
+}
+
+func processTask(scanner *bufio.Scanner) {
+	itemCount, ok := readSingleInt(scanner)
+	if !ok || itemCount <= 0 {
 		return
 	}
 
-	k, parseErr := strconv.Atoi(scanner.Text())
-	if parseErr != nil || k <= 0 {
+	nums := readNumbers(scanner, itemCount)
+
+	k, ok := readSingleInt(scanner)
+	if !ok || k <= 0 || k > len(nums) {
 		return
 	}
 
-	for range k - 1 {
-		if numberHeap.Len() == 0 {
-			break
-		}
+	sort.Ints(nums)
 
-		heap.Pop(numberHeap)
-	}
-
-	if numberHeap.Len() > 0 {
-		fmt.Println((*numberHeap)[0])
-	}
+	fmt.Println(nums[k-1])
 }
 
 func main() {
