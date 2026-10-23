@@ -67,7 +67,7 @@ func main() {
 	}
 
 	if k > count {
-		fmt.Println("k is too big")
+		fmt.Println("The position is too big if compare with count")
 
 		return
 	}
