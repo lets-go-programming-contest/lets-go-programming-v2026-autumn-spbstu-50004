@@ -3,9 +3,10 @@ package main
 import "fmt"
 
 func updateRange(L, R int, op string, val int) (int, int) {
-	if op == ">=" && val > L {
+	switch {
+	case op == ">=" && val > L:
 		L = val
-	} else if op == "<=" && val < R {
+	case op == "<=" && val < R:
 		R = val
 	}
 	return L, R
