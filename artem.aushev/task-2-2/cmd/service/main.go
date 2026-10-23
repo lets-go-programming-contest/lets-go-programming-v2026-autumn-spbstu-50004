@@ -1,11 +1,8 @@
 package main
 
 import (
-	"bufio"
 	"container/heap"
 	"fmt"
-	"os"
-	"strconv"
 )
 
 type IntHeap []int
@@ -14,84 +11,66 @@ func (h *IntHeap) Len() int {
 	return len(*h)
 }
 
-func (h *IntHeap) Less(i, j int) bool {
-	return (*h)[i] > (*h)[j]
+func (h *IntHeap) Less(firstIndex, secondIndex int) bool {
+	return (*h)[firstIndex] > (*h)[secondIndex]
 }
 
-func (h *IntHeap) Swap(i, j int) {
-	(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
+func (h *IntHeap) Swap(firstIndex, secondIndex int) {
+	(*h)[firstIndex], (*h)[secondIndex] = (*h)[secondIndex], (*h)[firstIndex]
 }
 
-func (h *IntHeap) Push(x any) {
-	heapValue, isInteger := x.(int)
+func (h *IntHeap) Push(element any) {
+	integerValue, isInteger := element.(int)
 	if !isInteger {
 		return
 	}
 
-	*h = append(*h, heapValue)
+	*h = append(*h, integerValue)
 }
 
 func (h *IntHeap) Pop() any {
-	old := *h
-	n := len(old)
-	x := old[n-1]
-	*h = old[0 : n-1]
+	oldHeapState := *h
+	heapLength := len(oldHeapState)
+	lastElement := oldHeapState[heapLength-1]
+	*h = oldHeapState[0 : heapLength-1]
 
-	return x
+	return lastElement
 }
 
 func main() {
-	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Split(bufio.ScanWords)
-
-	if !scanner.Scan() {
+	var totalDishesCount int
+	if _, inputError := fmt.Scan(&totalDishesCount); inputError != nil {
 		return
 	}
 
-	dishesCount, err := strconv.Atoi(scanner.Text())
-	if err != nil || dishesCount <= 0 {
-		return
-	}
+	customMaxHeap := &IntHeap{}
 
-	maxHeap := &IntHeap{}
-	heap.Init(maxHeap)
-
-	for range dishesCount {
-		if !scanner.Scan() {
-			break
-		}
-
-		val, parseErr := strconv.Atoi(scanner.Text())
-		if parseErr != nil {
-			continue
-		}
-
-		heap.Push(maxHeap, val)
-	}
-
-	if !scanner.Scan() {
-		return
-	}
-
-	targetRank, err := strconv.Atoi(scanner.Text())
-	if err != nil || targetRank <= 0 {
-		return
-	}
-
-	var result int
-
-	for range targetRank {
-		if maxHeap.Len() == 0 {
-			break
-		}
-
-		popped, isInteger := heap.Pop(maxHeap).(int)
-		if !isInteger {
+	for range totalDishesCount {
+		var currentDishValue int
+		if _, readError := fmt.Scan(&currentDishValue); readError != nil {
 			return
 		}
 
-		result = popped
+		*customMaxHeap = append(*customMaxHeap, currentDishValue)
 	}
 
-	fmt.Println(result)
+	heap.Init(customMaxHeap)
+
+	var targetRankIndex int
+	if _, rankError := fmt.Scan(&targetRankIndex); rankError != nil {
+		return
+	}
+
+	var finalResult int
+
+	for range targetRankIndex {
+		poppedValue, conversionOk := heap.Pop(customMaxHeap).(int)
+		if !conversionOk {
+			return
+		}
+
+		finalResult = poppedValue
+	}
+
+	fmt.Println(finalResult)
 }
