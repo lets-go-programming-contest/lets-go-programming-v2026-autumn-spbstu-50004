@@ -2,6 +2,15 @@ package main
 
 import "fmt"
 
+func updateRange(L, R int, op string, val int) (int, int) {
+	if op == ">=" && val > L {
+		L = val
+	} else if op == "<=" && val < R {
+		R = val
+	}
+	return L, R
+}
+
 func main() {
 	var n int
 	fmt.Scan(&n)
@@ -17,15 +26,7 @@ func main() {
 			var val int
 			fmt.Scan(&op, &val)
 
-			if op == ">=" {
-				if val > L {
-					L = val
-				}
-			} else if op == "<=" {
-				if val < R {
-					R = val
-				}
-			}
+			L, R = updateRange(L, R, op, val)
 
 			if L <= R {
 				fmt.Println(L)
