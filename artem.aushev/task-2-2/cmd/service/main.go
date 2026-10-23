@@ -40,10 +40,7 @@ func (h *IntHeap) Pop() interface{} {
 	return x
 }
 
-func main() {
-	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Split(bufio.ScanWords)
-
+func processTask(scanner *bufio.Scanner) {
 	if !scanner.Scan() {
 		return
 	}
@@ -89,4 +86,11 @@ func main() {
 	if numberHeap.Len() > 0 {
 		fmt.Println((*numberHeap)[0])
 	}
+}
+
+func main() {
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Split(bufio.ScanWords)
+
+	processTask(scanner)
 }
