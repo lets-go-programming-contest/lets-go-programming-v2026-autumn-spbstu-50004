@@ -7,20 +7,26 @@ import (
 
 type IntHeap []int
 
-func (h IntHeap) Len() int {
-	return len(h)
+func (h *IntHeap) Len() int {
+	return len(*h)
 }
 
-func (h IntHeap) Less(i, j int) bool {
-	return h[i] > h[j]
+func (h *IntHeap) Less(i, j int) bool {
+	return (*h)[i] > (*h)[j]
 }
 
-func (h IntHeap) Swap(i, j int) {
-	h[i], h[j] = h[j], h[i]
+func (h *IntHeap) Swap(i, j int) {
+	(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
 }
 
 func (h *IntHeap) Push(x any) {
-	*h = append(*h, x.(int))
+	value, ok := x.(int)
+	if !ok {
+		fmt.Println("value is not int")
+
+		return
+	}
+	*h = append(*h, value)
 }
 
 func (h *IntHeap) Pop() any {
@@ -33,50 +39,51 @@ func (h *IntHeap) Pop() any {
 }
 
 func main() {
-	h := &IntHeap{}
-	heap.Init(h)
+	intHeap := &IntHeap{}
+	heap.Init(intHeap)
 
 	count := 0
 
-	_, error := fmt.Scanf("%d", &count)
-	if error != nil {
-		fmt.Println(error)
-
-		return
-	}
-
-	for i := 0; i < count; i++ {
-		num := 0
-
-		_, error := fmt.Scanf("%d", &num)
-		if error != nil {
-			fmt.Println(error)
-
-			return
-		}
-
-		heap.Push(h, num)
-	}
-
-	k := 0
-	_, err := fmt.Scanf("%d", &k)
+	_, err := fmt.Scanf("%d", &count)
 	if err != nil {
 		fmt.Println(err)
 
 		return
 	}
 
-	if k > count {
+	for range count {
+		num := 0
+
+		_, err = fmt.Scanf("%d", &num)
+		if err != nil {
+			fmt.Println(err)
+
+			return
+		}
+
+		heap.Push(intHeap, num)
+	}
+
+	position := 0
+
+	_, err = fmt.Scanf("%d", &position)
+	if err != nil {
+		fmt.Println(err)
+
+		return
+	}
+
+	if position > count {
 		fmt.Println("The position is too big if compare with count")
 
 		return
 	}
 
-	for i := 0; i < k-1; i++ {
-		heap.Pop(h)
+	for range position - 1 {
+		heap.Pop(intHeap)
 	}
 
-	result := heap.Pop(h)
+	result := heap.Pop(intHeap)
 
 	fmt.Println(result)
 }
