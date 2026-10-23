@@ -19,8 +19,8 @@ func newConditioner() *conditioner {
 	return &conditioner{high: MaxTemp, low: MinTemp}
 }
 
-func (c *conditioner) regulate(op string, temp int) int {
-	switch op {
+func (c *conditioner) regulate(operator string, temp int) int {
+	switch operator {
 	case lte:
 		if temp < c.high {
 			c.high = temp
@@ -60,17 +60,17 @@ func main() {
 
 		for range employeesCount {
 			var (
-				op   string
-				temp int
+				operator string
+				temp     int
 			)
 
-			if _, err := fmt.Scan(&op, &temp); err != nil {
+			if _, err := fmt.Scan(&operator, &temp); err != nil {
 				fmt.Println("Invalid temperature input")
 
 				return
 			}
 
-			fmt.Println(curCond.regulate(op, temp))
+			fmt.Println(curCond.regulate(operator, temp))
 		}
 	}
 }
