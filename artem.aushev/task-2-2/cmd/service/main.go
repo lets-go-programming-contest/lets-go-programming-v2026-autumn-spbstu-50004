@@ -2,65 +2,96 @@ package main
 
 import (
 	"bufio"
+	"container/heap"
 	"fmt"
 	"os"
-	"sort"
 	"strconv"
 )
 
-func readNumbers(scanner *bufio.Scanner, count int) []int {
-	nums := make([]int, 0, count)
+type IntHeap []int
 
-	for range count {
-		if !scanner.Scan() {
-			break
-		}
-
-		val, err := strconv.Atoi(scanner.Text())
-		if err != nil {
-			continue
-		}
-
-		nums = append(nums, val)
-	}
-
-	return nums
+func (h *IntHeap) Len() int {
+	return len(*h)
 }
 
-func readSingleInt(scanner *bufio.Scanner) (int, bool) {
-	if !scanner.Scan() {
-		return 0, false
-	}
-
-	val, err := strconv.Atoi(scanner.Text())
-	if err != nil {
-		return 0, false
-	}
-
-	return val, true
+func (h *IntHeap) Less(i, j int) bool {
+	return (*h)[i] > (*h)[j]
 }
 
-func processTask(scanner *bufio.Scanner) {
-	itemCount, ok := readSingleInt(scanner)
-	if !ok || itemCount <= 0 {
+func (h *IntHeap) Swap(i, j int) {
+	(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
+}
+
+func (h *IntHeap) Push(x any) {
+	heapValue, isInteger := x.(int)
+	if !isInteger {
 		return
 	}
 
-	nums := readNumbers(scanner, itemCount)
+	*h = append(*h, heapValue)
+}
 
-	k, ok := readSingleInt(scanner)
-	if !ok || k <= 0 || k > len(nums) {
-		return
-	}
+func (h *IntHeap) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
 
-	sort.Ints(nums)
-
-	fmt.Println(nums[k-1])
+	return x
 }
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Split(bufio.ScanWords)
 
-	processTask(scanner)
+	if !scanner.Scan() {
+		return
+	}
+
+	dishesCount, err := strconv.Atoi(scanner.Text())
+	if err != nil || dishesCount <= 0 {
+		return
+	}
+
+	maxHeap := &IntHeap{}
+	heap.Init(maxHeap)
+
+	for range dishesCount {
+		if !scanner.Scan() {
+			break
+		}
+
+		val, parseErr := strconv.Atoi(scanner.Text())
+		if parseErr != nil {
+			continue
+		}
+
+		heap.Push(maxHeap, val)
+	}
+
+	if !scanner.Scan() {
+		return
+	}
+
+	targetRank, err := strconv.Atoi(scanner.Text())
+	if err != nil || targetRank <= 0 {
+		return
+	}
+
+	var result int
+
+	for range targetRank {
+		if maxHeap.Len() == 0 {
+			break
+		}
+
+		popped, isInteger := heap.Pop(maxHeap).(int)
+		if !isInteger {
+			return
+		}
+
+		result = popped
+	}
+
+	fmt.Println(result)
 }
