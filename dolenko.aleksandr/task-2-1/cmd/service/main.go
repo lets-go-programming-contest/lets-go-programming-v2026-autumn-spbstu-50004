@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 const (
 	MaxTemp = 30
 	MinTemp = 15
@@ -54,5 +56,21 @@ func main() {
 			return
 		}
 
+		curCond := newConditioner()
 
+		for range employeesCount {
+			var (
+				op   string
+				temp int
+			)
+
+			if _, err := fmt.Scan(&op, &temp); err != nil {
+				fmt.Println("Invalid temperature input")
+
+				return
+			}
+
+			fmt.Println(curCond.regulate(op, temp))
+		}
+	}
 }
