@@ -10,4 +10,15 @@ const (
 func main() {
 	var n int
 	fmt.Scan(&n)
+
+	for i := 0; i < n; i++ {
+		var k int
+		fmt.Scan(&k)
+
+		for j := 0; j < k; j++ {
+			var op string
+			var value int
+			fmt.Scan(&op, &value)
+		}
+	}
 }
