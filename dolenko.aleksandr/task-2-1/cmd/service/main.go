@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 const (
 	MaxTemp = 30
@@ -19,7 +22,7 @@ func newConditioner() *conditioner {
 	return &conditioner{high: MaxTemp, low: MinTemp}
 }
 
-func (c *conditioner) regulate(operator string, temp int) int {
+func (c *conditioner) regulate(operator string, temp int) (int, error) {
 	switch operator {
 	case lte:
 		if temp < c.high {
@@ -29,13 +32,15 @@ func (c *conditioner) regulate(operator string, temp int) int {
 		if temp > c.low {
 			c.low = temp
 		}
+	default:
+		return NoTemp, errors.New("invalid operator")
 	}
 
 	if c.low > c.high {
-		return NoTemp
+		return NoTemp, errors.New("no valid temperature")
 	}
 
-	return c.low
+	return c.low, nil
 }
 
 func main() {
@@ -43,16 +48,14 @@ func main() {
 
 	_, err := fmt.Scan(&departamentsCount)
 	if err != nil {
-		fmt.Println("Invalid department number")
-
+		fmt.Println(errors.New("invalid department number"))
 		return
 	}
 
 	for range departamentsCount {
 		var employeesCount int
 		if _, err := fmt.Scan(&employeesCount); err != nil {
-			fmt.Println("Invalid employees number")
-
+			fmt.Println(errors.New("invalid employees number"))
 			return
 		}
 
@@ -65,12 +68,17 @@ func main() {
 			)
 
 			if _, err := fmt.Scan(&operator, &temp); err != nil {
-				fmt.Println("Invalid temperature input")
-
+				fmt.Println(errors.New("invalid temperature input"))
 				return
 			}
 
-			fmt.Println(curCond.regulate(operator, temp))
+			result, err := curCond.regulate(operator, temp)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+
+			fmt.Println(result)
 		}
 	}
 }
