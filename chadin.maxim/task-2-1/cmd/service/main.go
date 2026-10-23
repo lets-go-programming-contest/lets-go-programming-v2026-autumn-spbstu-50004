@@ -33,25 +33,38 @@ func (c *Conditioner) Optimal() int {
 	if c.lo <= c.hi {
 		return c.lo
 	}
+
 	return -1
 }
 
 func main() {
 	var n int
-	fmt.Scan(&n)
 
-	for i := 0; i < n; i++ {
+	if _, err := fmt.Scan(&n); err != nil {
+		return
+	}
+
+	for range n {
 		var k int
-		fmt.Scan(&k)
+
+		if _, err := fmt.Scan(&k); err != nil {
+			return
+		}
 
 		conditioner := NewConditioner()
 
-		for j := 0; j < k; j++ {
-			var op string
-			var value int
-			fmt.Scan(&op, &value)
+		for range k {
+			var (
+				op    string
+				value int
+			)
+
+			if _, err := fmt.Scan(&op, &value); err != nil {
+				return
+			}
 
 			conditioner.Apply(op, value)
+
 			fmt.Println(conditioner.Optimal())
 		}
 	}
