@@ -37,5 +37,22 @@ func (c *conditioner) regulate(op string, temp int) int {
 }
 
 func main() {
+	var departamentsCount int
+
+	_, err := fmt.Scan(&departamentsCount)
+	if err != nil {
+		fmt.Println("Invalid department number")
+
+		return
+	}
+
+	for range departamentsCount {
+		var employeesCount int
+		if _, err := fmt.Scan(&employeesCount); err != nil {
+			fmt.Println("Invalid employees number")
+
+			return
+		}
+
 
 }
