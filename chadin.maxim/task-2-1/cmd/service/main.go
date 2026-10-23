@@ -15,10 +15,25 @@ func main() {
 		var k int
 		fmt.Scan(&k)
 
+		lo, hi := minTemp, maxTemp
+
 		for j := 0; j < k; j++ {
 			var op string
 			var value int
 			fmt.Scan(&op, &value)
+
+			switch op {
+			case ">=":
+				if value > lo {
+					lo = value
+				}
+			case "<=":
+				if value < hi {
+					hi = value
+				}
+			}
+
+			fmt.Println(lo)
 		}
 	}
 }
