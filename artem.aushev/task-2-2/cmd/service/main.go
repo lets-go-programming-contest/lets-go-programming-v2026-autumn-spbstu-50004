@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"strings"
 )
 
 type IntHeap []int
@@ -41,78 +40,40 @@ func (h *IntHeap) Pop() interface{} {
 	return x
 }
 
-func readNextToken(scanner *bufio.Scanner) (string, bool) {
-	for {
-		if len(scanner.Bytes()) > 0 {
-			fields := strings.Fields(scanner.Text())
-			if len(fields) > 0 {
-				// В реальном потоковом сканировании токенов удобнее использовать 
-				// scanner.Split(bufio.ScanWords), но для сохранения структуры 
-				// воспользуемся стандартным построчным чтением с правильным разбором.
-			}
-		}
-		if !scanner.Scan() {
-			return "", false
-		}
-	}
-}
-
-func parseTargetCount(scanner *bufio.Scanner) (int, bool) {
-	if !scanner.Scan() {
-		return 0, false
-	}
-
-	itemCountStr := strings.TrimSpace(scanner.Text())
-
-	itemCount, err := strconv.Atoi(itemCountStr)
-	if err != nil || itemCount <= 0 {
-		return 0, false
-	}
-
-	return itemCount, true
-}
-
-func fillHeap(scanner *bufio.Scanner, numberHeap *IntHeap, itemCount int) {
-	wordsRead := 0
-
-	for wordsRead < itemCount && scanner.Scan() {
-		line := scanner.Text()
-		fields := strings.Fields(line)
-
-		for _, field := range fields {
-			if wordsRead >= itemCount {
-				break
-			}
-
-			val, parseErr := strconv.Atoi(field)
-			if parseErr == nil {
-				heap.Push(numberHeap, val)
-				wordsRead++
-			}
-		}
-	}
-}
-
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Split(bufio.ScanWords)
 
-	itemCount, ok := parseTargetCount(scanner)
-	if !ok {
+	if !scanner.Scan() {
+		return
+	}
+
+	itemCount, err := strconv.Atoi(scanner.Text())
+	if err != nil || itemCount <= 0 {
 		return
 	}
 
 	numberHeap := &IntHeap{}
 	heap.Init(numberHeap)
 
-	fillHeap(scanner, numberHeap, itemCount)
+	for range itemCount {
+		if !scanner.Scan() {
+			break
+		}
+
+		val, parseErr := strconv.Atoi(scanner.Text())
+		if parseErr != nil {
+			continue
+		}
+
+		heap.Push(numberHeap, val)
+	}
 
 	if !scanner.Scan() {
 		return
 	}
 
-	kStr := strings.TrimSpace(scanner.Text())
-
-	k, parseErr := strconv.Atoi(kStr)
+	k, parseErr := strconv.Atoi(scanner.Text())
 	if parseErr != nil || k <= 0 {
 		return
 	}
