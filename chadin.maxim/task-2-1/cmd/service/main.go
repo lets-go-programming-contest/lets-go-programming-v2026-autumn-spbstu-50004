@@ -16,6 +16,26 @@ func NewConditioner() *Conditioner {
 	return &Conditioner{lo: minTemp, hi: maxTemp}
 }
 
+func (c *Conditioner) Apply(op string, value int) {
+	switch op {
+	case ">=":
+		if value > c.lo {
+			c.lo = value
+		}
+	case "<=":
+		if value < c.hi {
+			c.hi = value
+		}
+	}
+}
+
+func (c *Conditioner) Optimal() int {
+	if c.lo <= c.hi {
+		return c.lo
+	}
+	return -1
+}
+
 func main() {
 	var n int
 	fmt.Scan(&n)
