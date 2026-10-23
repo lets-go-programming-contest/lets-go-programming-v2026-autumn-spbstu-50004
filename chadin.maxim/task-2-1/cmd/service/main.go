@@ -16,8 +16,8 @@ func NewConditioner() *Conditioner {
 	return &Conditioner{lo: minTemp, hi: maxTemp}
 }
 
-func (c *Conditioner) Apply(op string, value int) {
-	switch op {
+func (c *Conditioner) Apply(operation string, value int) {
+	switch operation {
 	case ">=":
 		if value > c.lo {
 			c.lo = value
@@ -38,32 +38,32 @@ func (c *Conditioner) Optimal() int {
 }
 
 func main() {
-	var n int
+	var departmentsCount int
 
-	if _, err := fmt.Scan(&n); err != nil {
+	if _, err := fmt.Scan(&departmentsCount); err != nil {
 		return
 	}
 
-	for range n {
-		var k int
+	for range departmentsCount {
+		var employeesCount int
 
-		if _, err := fmt.Scan(&k); err != nil {
+		if _, err := fmt.Scan(&employeesCount); err != nil {
 			return
 		}
 
 		conditioner := NewConditioner()
 
-		for range k {
+		for range employeesCount {
 			var (
-				op    string
-				value int
+				operation string
+				value     int
 			)
 
-			if _, err := fmt.Scan(&op, &value); err != nil {
+			if _, err := fmt.Scan(&operation, &value); err != nil {
 				return
 			}
 
-			conditioner.Apply(op, value)
+			conditioner.Apply(operation, value)
 
 			fmt.Println(conditioner.Optimal())
 		}
