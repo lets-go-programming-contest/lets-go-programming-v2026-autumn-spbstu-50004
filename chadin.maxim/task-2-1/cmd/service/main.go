@@ -33,7 +33,11 @@ func main() {
 				}
 			}
 
-			fmt.Println(lo)
+			if lo <= hi {
+				fmt.Println(lo)
+			} else {
+				fmt.Println(-1)
+			}
 		}
 	}
 }
