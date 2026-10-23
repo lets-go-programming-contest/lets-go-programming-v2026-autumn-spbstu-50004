@@ -13,6 +13,12 @@ const (
 	NoTemp  = -1
 )
 
+var (
+	departmentNumberErr = errors.New("invalid department number")
+	employeesNumberErr  = errors.New("invalid employees number")
+	temperatureInputErr = errors.New("invalid temperature input")
+)
+
 type conditioner struct {
 	low  int
 	high int
@@ -32,12 +38,10 @@ func (c *conditioner) regulate(operator string, temp int) (int, error) {
 		if temp > c.low {
 			c.low = temp
 		}
-	default:
-		return NoTemp, errors.New("invalid operator")
 	}
 
 	if c.low > c.high {
-		return NoTemp, errors.New("no valid temperature")
+		return NoTemp, nil
 	}
 
 	return c.low, nil
@@ -48,14 +52,16 @@ func main() {
 
 	_, err := fmt.Scan(&departamentsCount)
 	if err != nil {
-		fmt.Println(errors.New("invalid department number"))
+		fmt.Println(departmentNumberErr)
+
 		return
 	}
 
 	for range departamentsCount {
 		var employeesCount int
 		if _, err := fmt.Scan(&employeesCount); err != nil {
-			fmt.Println(errors.New("invalid employees number"))
+			fmt.Println(employeesNumberErr)
+
 			return
 		}
 
@@ -68,13 +74,15 @@ func main() {
 			)
 
 			if _, err := fmt.Scan(&operator, &temp); err != nil {
-				fmt.Println(errors.New("invalid temperature input"))
+				fmt.Println(temperatureInputErr)
+
 				return
 			}
 
 			result, err := curCond.regulate(operator, temp)
 			if err != nil {
 				fmt.Println(err)
+
 				return
 			}
 
