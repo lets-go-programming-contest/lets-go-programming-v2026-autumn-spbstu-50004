@@ -31,7 +31,7 @@ func processDepartmentRequests(scanner *bufio.Scanner, numEmployees int) {
 	minTemp := minDefaultTemp
 	maxTemp := maxDefaultTemp
 
-	for i := 0; i < numEmployees; i++ {
+	for range numEmployees {
 		if !scanner.Scan() {
 			break
 		}
@@ -72,7 +72,7 @@ func main() {
 
 	numDepts := readInt(scanner)
 
-	for i := 0; i < numDepts; i++ {
+	for range numDepts {
 		numEmployees := readInt(scanner)
 
 		processDepartmentRequests(scanner, numEmployees)
