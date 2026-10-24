@@ -44,7 +44,7 @@ func (cc *climateControl) adjust(operator string, target int) int {
 func main() {
 	var totalDepts int
 	if _, err := fmt.Scan(&totalDepts); err != nil {
-		fmt.Println("Invalid departments count")
+		fmt.Println("Invalid departments count:", err)
 
 		return
 	}
@@ -52,7 +52,7 @@ func main() {
 	for range totalDepts {
 		var totalStaff int
 		if _, err := fmt.Scan(&totalStaff); err != nil {
-			fmt.Println("Invalid employees count")
+			fmt.Println("Invalid employees count:", err)
 
 			return
 		}
@@ -66,7 +66,7 @@ func main() {
 			)
 
 			if _, err := fmt.Scan(&condOperator, &wantedTemp); err != nil {
-				fmt.Println("Invalid temperature constraint")
+				fmt.Println("Invalid temperature constraint:", err)
 
 				return
 			}
