@@ -12,9 +12,9 @@ func (h *IntHeap) Len() int {
 
 func (h *IntHeap) Less(i, j int) bool {
 	if (*h).Len() > i && (*h).Len() > j {
-
 		return (*h)[i] > (*h)[j]
 	}
+
 	fmt.Println("Out of bound")
 
 	return false
@@ -31,7 +31,6 @@ func (h *IntHeap) Swap(i, j int) {
 func (h *IntHeap) Push(x any) {
 	value, ok := x.(int)
 	if !ok {
-
 		return
 	}
 
