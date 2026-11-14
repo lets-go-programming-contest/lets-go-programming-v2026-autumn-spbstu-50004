@@ -31,12 +31,12 @@ func Load(path string) (Config, error) {
 
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return Config{}, fmt.Errorf("Read configuration file %q: %w", path, err)
+		return Config{}, fmt.Errorf("read configuration file %q: %w", path, err)
 	}
 
 	cfg, err := decode(data)
 	if err != nil {
-		return Config{}, fmt.Errorf("Decode configuration file %q: %w", path, err)
+		return Config{}, fmt.Errorf("decode configuration file %q: %w", path, err)
 	}
 
 	return validate(cfg)
@@ -48,7 +48,7 @@ func decode(data []byte) (Config, error) {
 
 	var cfg Config
 	if err := decoder.Decode(&cfg); err != nil {
-		return Config{}, fmt.Errorf("Decode YAML: %w", err)
+		return Config{}, fmt.Errorf("decode YAML: %w", err)
 	}
 
 	var extra any
@@ -57,7 +57,7 @@ func decode(data []byte) (Config, error) {
 			return Config{}, errMultipleYAMLDocuments
 		}
 
-		return Config{}, fmt.Errorf("Unexpected trailing YAML content: %w", err)
+		return Config{}, fmt.Errorf("unexpected trailing YAML content: %w", err)
 	}
 
 	return cfg, nil
