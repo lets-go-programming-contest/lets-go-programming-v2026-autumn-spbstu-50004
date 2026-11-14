@@ -12,10 +12,10 @@ import (
 )
 
 var (
-	errEmptyConfigPath       = errors.New("Configuration file path is empty")
-	errMultipleYAMLDocuments = errors.New("Configuration file must contain exactly one YAML document")
-	errMissingInputFile      = errors.New("Required field input-file is missing")
-	errMissingOutputFile     = errors.New("Required field output-file is missing")
+	errEmptyConfigPath       = errors.New("configuration file path is empty")
+	errMultipleYAMLDocuments = errors.New("configuration file must contain exactly one YAML document")
+	errMissingInputFile      = errors.New("required field input-file is missing")
+	errMissingOutputFile     = errors.New("required field output-file is missing")
 )
 
 type Config struct {
@@ -56,6 +56,7 @@ func decode(data []byte) (Config, error) {
 		if err == nil {
 			return Config{}, errMultipleYAMLDocuments
 		}
+
 		return Config{}, fmt.Errorf("Unexpected trailing YAML content: %w", err)
 	}
 
@@ -69,6 +70,7 @@ func validate(cfg Config) (Config, error) {
 	if cfg.InputFile == "" {
 		return Config{}, errMissingInputFile
 	}
+
 	if cfg.OutputFile == "" {
 		return Config{}, errMissingOutputFile
 	}
