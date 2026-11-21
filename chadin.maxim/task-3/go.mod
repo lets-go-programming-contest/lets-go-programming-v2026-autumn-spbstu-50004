@@ -1,6 +1,6 @@
 module github.com/maxchadin/task-3
 
-go 1.26.0
+go 1.22.0
 
 require (
 	golang.org/x/text v0.44.0
