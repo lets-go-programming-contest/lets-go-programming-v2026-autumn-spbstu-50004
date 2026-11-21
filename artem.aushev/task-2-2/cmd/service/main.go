@@ -3,51 +3,25 @@ package main
 import (
 	"container/heap"
 	"fmt"
+	"log"
+	"os"
+
+	"task-2-2/internal/intheap"
 )
-
-type IntHeap []int
-
-func (h *IntHeap) Len() int {
-	return len(*h)
-}
-
-func (h *IntHeap) Less(firstIndex, secondIndex int) bool {
-	return (*h)[firstIndex] > (*h)[secondIndex]
-}
-
-func (h *IntHeap) Swap(firstIndex, secondIndex int) {
-	(*h)[firstIndex], (*h)[secondIndex] = (*h)[secondIndex], (*h)[firstIndex]
-}
-
-func (h *IntHeap) Push(element any) {
-	integerValue, isInteger := element.(int)
-	if !isInteger {
-		return
-	}
-
-	*h = append(*h, integerValue)
-}
-
-func (h *IntHeap) Pop() any {
-	oldHeapState := *h
-	heapLength := len(oldHeapState)
-	lastElement := oldHeapState[heapLength-1]
-	*h = oldHeapState[0 : heapLength-1]
-
-	return lastElement
-}
 
 func main() {
 	var totalDishesCount int
 	if _, inputError := fmt.Scan(&totalDishesCount); inputError != nil {
+		log.Println(fmt.Errorf("failed to read total dishes count: %w", inputError))
 		return
 	}
 
-	customMaxHeap := &IntHeap{}
+	customMaxHeap := &intheap.IntHeap{}
 
 	for range totalDishesCount {
 		var currentDishValue int
 		if _, readError := fmt.Scan(&currentDishValue); readError != nil {
+			log.Println(fmt.Errorf("failed to read dish value: %w", readError))
 			return
 		}
 
@@ -58,6 +32,12 @@ func main() {
 
 	var targetRankIndex int
 	if _, rankError := fmt.Scan(&targetRankIndex); rankError != nil {
+		log.Println(fmt.Errorf("failed to read target rank index: %w", rankError))
+		return
+	}
+
+	if targetRankIndex <= 0 || targetRankIndex > customMaxHeap.Len() {
+		log.Println(fmt.Errorf("target rank index %d is out of bounds for heap length %d", targetRankIndex, customMaxHeap.Len()))
 		return
 	}
 
@@ -66,6 +46,7 @@ func main() {
 	for range targetRankIndex {
 		poppedValue, conversionOk := heap.Pop(customMaxHeap).(int)
 		if !conversionOk {
+			log.Println(fmt.Errorf("failed to convert popped heap element to int"))
 			return
 		}
 
