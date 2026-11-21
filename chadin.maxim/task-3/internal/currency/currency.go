@@ -41,9 +41,9 @@ type ValCurs struct {
 }
 
 type Currency struct {
-	NumCode  int        `xml:"NumCode" json:"num_code"`
-	CharCode string     `xml:"CharCode" json:"char_code"`
-	Value    CommaFloat `xml:"Value" json:"value"`
+	NumCode  int        `json:"num_code"  xml:"NumCode"`
+	CharCode string     `json:"char_code" xml:"CharCode"`
+	Value    CommaFloat `json:"value"     xml:"Value"`
 }
 
 func ParseFromXML(inputPath string) []Currency {
@@ -51,7 +51,12 @@ func ParseFromXML(inputPath string) []Currency {
 	if err != nil {
 		panic(fmt.Errorf("failed to open input xml file: %w", err))
 	}
-	defer file.Close()
+
+	defer func() {
+		if closeErr := file.Close(); closeErr != nil {
+			panic(fmt.Errorf("failed to close input xml file: %w", closeErr))
+		}
+	}()
 
 	decoder := xml.NewDecoder(file)
 	decoder.CharsetReader = func(charset string, input io.Reader) (io.Reader, error) {
@@ -91,7 +96,12 @@ func SaveToJSON(outputPath string, currencies []Currency) {
 	if err != nil {
 		panic(fmt.Errorf("failed to create output file: %w", err))
 	}
-	defer file.Close()
+
+	defer func() {
+		if closeErr := file.Close(); closeErr != nil {
+			panic(fmt.Errorf("failed to close output json file: %w", closeErr))
+		}
+	}()
 
 	if _, err := file.Write(jsonData); err != nil {
 		panic(fmt.Errorf("failed to write json to file: %w", err))
