@@ -41,6 +41,7 @@ func main() {
 	var departmentsCount int
 
 	if _, err := fmt.Scan(&departmentsCount); err != nil {
+		fmt.Println(fmt.Errorf("failed to scan departments count: %w", err))
 		return
 	}
 
@@ -48,6 +49,7 @@ func main() {
 		var employeesCount int
 
 		if _, err := fmt.Scan(&employeesCount); err != nil {
+			fmt.Println(fmt.Errorf("failed to scan employees count: %w", err))
 			return
 		}
 
@@ -60,6 +62,7 @@ func main() {
 			)
 
 			if _, err := fmt.Scan(&operation, &value); err != nil {
+				fmt.Println(fmt.Errorf("failed to scan employee preference: %w", err))
 				return
 			}
 
