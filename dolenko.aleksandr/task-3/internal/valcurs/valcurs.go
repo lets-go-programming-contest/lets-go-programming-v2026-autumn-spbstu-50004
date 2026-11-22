@@ -58,20 +58,6 @@ func Load(path string) (ValCurs, error) {
 		return ValCurs{}, fmt.Errorf("XML contains no currencies")
 	}
 
-	for index, currency := range currencies.Valutes {
-		if currency.NumCode <= 0 {
-			return ValCurs{}, fmt.Errorf("invalid NumCode at currency %d", index+1)
-		}
-
-		if strings.TrimSpace(currency.CharCode) == "" {
-			return ValCurs{}, fmt.Errorf("empty CharCode at currency %d", index+1)
-		}
-
-		if currency.Value <= 0 {
-			return ValCurs{}, fmt.Errorf("invalid Value at currency %d", index+1)
-		}
-	}
-
 	return currencies, nil
 }
 
