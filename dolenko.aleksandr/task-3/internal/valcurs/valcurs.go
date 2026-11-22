@@ -27,11 +27,13 @@ func (v *CurrencyValue) UnmarshalText(data []byte) error {
 	return nil
 }
 
+
 type Valute struct {
-	NumCode  int           `xml:"NumCode"`
-	CharCode string        `xml:"CharCode"`
-	Value    CurrencyValue `xml:"Value"`
+    NumCode  int           `xml:"NumCode" json:"num_code"`
+    CharCode string        `xml:"CharCode" json:"char_code"`
+    Value    CurrencyValue `xml:"Value" json:"value"`
 }
+
 
 type ValCurs struct {
 	XMLName xml.Name `xml:"ValCurs"`

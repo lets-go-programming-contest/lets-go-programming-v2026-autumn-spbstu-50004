@@ -26,9 +26,10 @@ func main() {
 
 	valcurs.SortByValue(currencies.Valutes)
 
-	fmt.Println("Sorted currencies:")
-
-	for _, currency := range currencies.Valutes {
-		fmt.Printf("%s: %.4f\n", currency.CharCode, currency.Value)
+	err = valcurs.Save(cfg.OutputFile, currencies.Valutes)
+	if err != nil {
+		panic(err)
 	}
+
+	fmt.Println("Currencies saved to:", cfg.OutputFile)
 }
