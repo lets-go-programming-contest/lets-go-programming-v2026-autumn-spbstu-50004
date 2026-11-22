@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/xweads/task-3/internal/config"
+	"github.com/xweads/task-3/internal/valcurs"
 )
 
 const defaultConfigPath = "config.yaml"
@@ -18,6 +19,10 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("Input file:", cfg.InputFile)
-	fmt.Println("Output file:", cfg.OutputFile)
+	currencies, err := valcurs.Load(cfg.InputFile)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Loaded currencies:", len(currencies.Valutes))
 }
