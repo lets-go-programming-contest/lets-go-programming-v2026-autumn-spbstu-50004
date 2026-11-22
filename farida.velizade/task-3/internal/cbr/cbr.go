@@ -93,15 +93,11 @@ func WriteJSON(path string, rates []Currency) error {
 		return fmt.Errorf("marshal json data: %w", err)
 	}
 
-	err = os.MkdirAll(filepath.Dir(path), 0755)
-
-	if err != nil {
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
 		return fmt.Errorf("create output dir: %w", err)
 	}
 
-	err = os.WriteFile(path, data, 0600)
-
-	if err != nil {
+	if err := os.WriteFile(path, data, 0600); err != nil {
 		return fmt.Errorf("write json file: %w", err)
 	}
 
