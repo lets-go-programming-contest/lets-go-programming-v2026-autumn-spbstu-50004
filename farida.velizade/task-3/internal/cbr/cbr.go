@@ -28,6 +28,7 @@ func (c *CurrencyCode) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 	}
 
 	*c = CurrencyCode(val)
+
 	return nil
 }
 
@@ -46,6 +47,7 @@ func (c *CurrencyValue) UnmarshalXML(d *xml.Decoder, start xml.StartElement) err
 	}
 
 	*c = CurrencyValue(val)
+
 	return nil
 }
 
@@ -88,11 +90,13 @@ func WriteJSON(path string, rates []Currency) error {
 		return fmt.Errorf("marshal json data: %w", err)
 	}
 
-	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+	err = os.MkdirAll(filepath.Dir(path), 0755)
+	if err != nil {
 		return fmt.Errorf("create output dir: %w", err)
 	}
 
-	if err := os.WriteFile(path, data, 0644); err != nil {
+	err = os.WriteFile(path, data, 0600)
+	if err != nil {
 		return fmt.Errorf("write json file: %w", err)
 	}
 
