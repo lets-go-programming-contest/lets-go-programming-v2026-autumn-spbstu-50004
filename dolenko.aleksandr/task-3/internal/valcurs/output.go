@@ -15,12 +15,12 @@ func Save(path string, valutes []Valute) error {
 
 	dir := filepath.Dir(path)
 
-	err = os.MkdirAll(dir, 0755)
+	err = os.MkdirAll(dir, 0o755)
 	if err != nil {
 		return fmt.Errorf("create directory: %w", err)
 	}
 
-	err = os.WriteFile(path, data, 0600)
+	err = os.WriteFile(path, data, 0o600)
 	if err != nil {
 		return fmt.Errorf("write JSON file: %w", err)
 	}
