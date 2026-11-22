@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sort"
 
 	"golang.org/x/net/html/charset"
 )
@@ -54,4 +55,12 @@ func Load(path string) (ValCurs, error) {
 	}
 
 	return currencies, nil
+
+
+	func SortByValue(valutes []Valute) {
+    	sort.Slice(valutes, func(i, j int) bool {
+        	return valutes[i].Value > valutes[j].Value
+    	})
+	}
+
 }

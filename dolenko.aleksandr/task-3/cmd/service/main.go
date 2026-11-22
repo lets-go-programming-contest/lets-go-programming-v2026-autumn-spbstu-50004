@@ -24,11 +24,11 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("Loaded currencies:", len(currencies.Valutes))
+	valcurs.SortByValue(currencies.Valutes)
 
-	if len(currencies.Valutes) > 0 {
-		first := currencies.Valutes[0]
-		fmt.Printf("First currency: %s, %.4f\n", first.CharCode, first.Value)
+	fmt.Println("Sorted currencies:")
+
+	for _, currency := range currencies.Valutes {
+		fmt.Printf("%s: %.4f\n", currency.CharCode, currency.Value)
 	}
-
 }
