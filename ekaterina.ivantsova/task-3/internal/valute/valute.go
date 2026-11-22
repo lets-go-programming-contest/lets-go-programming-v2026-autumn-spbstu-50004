@@ -18,9 +18,9 @@ var (
 type RateValue float64
 
 type Item struct {
-	NumCode  int       `json:"num_code" xml:"NumCode"`
+	NumCode  int       `json:"num_code"  xml:"NumCode"`
 	CharCode string    `json:"char_code" xml:"CharCode"`
-	Value    RateValue `json:"value" xml:"Value"`
+	Value    RateValue `json:"value"     xml:"Value"`
 }
 
 func (value *RateValue) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
