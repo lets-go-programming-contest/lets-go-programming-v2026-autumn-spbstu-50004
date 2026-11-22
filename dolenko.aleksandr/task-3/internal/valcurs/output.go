@@ -20,7 +20,7 @@ func Save(path string, valutes []Valute) error {
 		return fmt.Errorf("create directory: %w", err)
 	}
 
-	err = os.WriteFile(path, data, 0644)
+	err = os.WriteFile(path, data, 0600)
 	if err != nil {
 		return fmt.Errorf("write JSON file: %w", err)
 	}

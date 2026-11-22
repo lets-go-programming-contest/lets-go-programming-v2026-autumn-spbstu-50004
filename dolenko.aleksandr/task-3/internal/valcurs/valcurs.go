@@ -3,6 +3,7 @@ package valcurs
 import (
 	"bytes"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"os"
 	"sort"
@@ -11,6 +12,8 @@ import (
 
 	"golang.org/x/net/html/charset"
 )
+
+var errNoCurrencies = errors.New("XML contains no currencies")
 
 type CurrencyValue float64
 
@@ -24,13 +27,14 @@ func (v *CurrencyValue) UnmarshalText(data []byte) error {
 	}
 
 	*v = CurrencyValue(number)
+
 	return nil
 }
 
 type Valute struct {
-	NumCode  int           `json:"num_code" xml:"NumCode"`
+	NumCode  int           `json:"num_code"  xml:"NumCode"`
 	CharCode string        `json:"char_code" xml:"CharCode"`
-	Value    CurrencyValue `json:"value" xml:"Value"`
+	Value    CurrencyValue `json:"value"     xml:"Value"`
 }
 
 type ValCurs struct {
@@ -55,7 +59,7 @@ func Load(path string) (ValCurs, error) {
 	}
 
 	if len(currencies.Valutes) == 0 {
-		return ValCurs{}, fmt.Errorf("XML contains no currencies")
+		return ValCurs{}, errNoCurrencies
 	}
 
 	return currencies, nil
