@@ -9,8 +9,10 @@ import (
 	"github.com/ekaterinaivanc/task-3/internal/valute"
 )
 
+const defaultConfigPath = "config.yaml"
+
 func main() {
-	configPath := flag.String("config", "", "path to YAML configuration file")
+	configPath := flag.String("config", defaultConfigPath, "path to YAML configuration file")
 
 	flag.Parse()
 
