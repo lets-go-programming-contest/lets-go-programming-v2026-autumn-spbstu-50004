@@ -28,9 +28,9 @@ func (v *CurrencyValue) UnmarshalText(data []byte) error {
 }
 
 type Valute struct {
-	NumCode  int           `xml:"NumCode" json:"num_code"`
-	CharCode string        `xml:"CharCode" json:"char_code"`
-	Value    CurrencyValue `xml:"Value" json:"value"`
+	NumCode  int           `json:"num_code" xml:"NumCode"`
+	CharCode string        `json:"char_code" xml:"CharCode"`
+	Value    CurrencyValue `json:"value" xml:"Value"`
 }
 
 type ValCurs struct {
@@ -58,17 +58,17 @@ func Load(path string) (ValCurs, error) {
 		return ValCurs{}, fmt.Errorf("XML contains no currencies")
 	}
 
-	for i, currency := range currencies.Valutes {
+	for index, currency := range currencies.Valutes {
 		if currency.NumCode <= 0 {
-			return ValCurs{}, fmt.Errorf("invalid NumCode at currency %d", i+1)
+			return ValCurs{}, fmt.Errorf("invalid NumCode at currency %d", index+1)
 		}
 
 		if strings.TrimSpace(currency.CharCode) == "" {
-			return ValCurs{}, fmt.Errorf("empty CharCode at currency %d", i+1)
+			return ValCurs{}, fmt.Errorf("empty CharCode at currency %d", index+1)
 		}
 
 		if currency.Value <= 0 {
-			return ValCurs{}, fmt.Errorf("invalid Value at currency %d", i+1)
+			return ValCurs{}, fmt.Errorf("invalid Value at currency %d", index+1)
 		}
 	}
 
