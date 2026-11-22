@@ -41,6 +41,7 @@ func (c *CurrencyValue) UnmarshalXML(d *xml.Decoder, start xml.StartElement) err
 	}
 
 	normalized := strings.ReplaceAll(strings.TrimSpace(raw), ",", ".")
+
 	val, err := strconv.ParseFloat(normalized, 64)
 	if err != nil {
 		return fmt.Errorf("parse currency value %q: %w", raw, err)
@@ -69,6 +70,7 @@ func ParseXML(path string) ([]Currency, error) {
 	}
 
 	var curs valCurs
+
 	decoder := xml.NewDecoder(bytes.NewReader(data))
 	decoder.CharsetReader = charset.NewReaderLabel
 
@@ -77,6 +79,7 @@ func ParseXML(path string) ([]Currency, error) {
 	}
 
 	rates := curs.Valutes
+
 	sort.SliceStable(rates, func(i, j int) bool {
 		return rates[i].Value > rates[j].Value
 	})
