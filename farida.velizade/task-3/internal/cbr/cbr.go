@@ -1,10 +1,17 @@
 package cbr
 
 import (
+	"bytes"
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"os"
+	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
+
+	"golang.org/x/net/html/charset"
 )
 
 type CurrencyCode int
@@ -51,4 +58,43 @@ type Currency struct {
 type valCurs struct {
 	XMLName xml.Name   `xml:"ValCurs"`
 	Valutes []Currency `xml:"Valute"`
+}
+
+func ParseXML(path string) ([]Currency, error) {
+	data, err := os.ReadFile(filepath.Clean(path))
+	if err != nil {
+		return nil, fmt.Errorf("read cbr xml: %w", err)
+	}
+
+	var curs valCurs
+	decoder := xml.NewDecoder(bytes.NewReader(data))
+	decoder.CharsetReader = charset.NewReaderLabel
+
+	if err := decoder.Decode(&curs); err != nil {
+		return nil, fmt.Errorf("decode cbr xml: %w", err)
+	}
+
+	rates := curs.Valutes
+	sort.SliceStable(rates, func(i, j int) bool {
+		return rates[i].Value > rates[j].Value
+	})
+
+	return rates, nil
+}
+
+func WriteJSON(path string, rates []Currency) error {
+	data, err := json.MarshalIndent(rates, "", "  ")
+	if err != nil {
+		return fmt.Errorf("marshal json data: %w", err)
+	}
+
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		return fmt.Errorf("create output dir: %w", err)
+	}
+
+	if err := os.WriteFile(path, data, 0644); err != nil {
+		return fmt.Errorf("write json file: %w", err)
+	}
+
+	return nil
 }
