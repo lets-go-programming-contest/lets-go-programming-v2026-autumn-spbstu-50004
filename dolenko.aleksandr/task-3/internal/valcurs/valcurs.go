@@ -5,14 +5,31 @@ import (
 	"encoding/xml"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 
 	"golang.org/x/net/html/charset"
 )
 
+type CurrencyValue float64
+
+func (v *CurrencyValue) UnmarshalText(data []byte) error {
+	value := strings.TrimSpace(string(data))
+	value = strings.ReplaceAll(value, ",", ".")
+
+	number, err := strconv.ParseFloat(value, 64)
+	if err != nil {
+		return fmt.Errorf("parse currency value: %w", err)
+	}
+
+	*v = CurrencyValue(number)
+	return nil
+}
+
 type Valute struct {
-	NumCode  int    `xml:"NumCode"`
-	CharCode string `xml:"CharCode"`
-	Value    string `xml:"Value"`
+	NumCode  int           `xml:"NumCode"`
+	CharCode string        `xml:"CharCode"`
+	Value    CurrencyValue `xml:"Value"`
 }
 
 type ValCurs struct {

@@ -25,4 +25,10 @@ func main() {
 	}
 
 	fmt.Println("Loaded currencies:", len(currencies.Valutes))
+
+	if len(currencies.Valutes) > 0 {
+		first := currencies.Valutes[0]
+		fmt.Printf("First currency: %s, %.4f\n", first.CharCode, first.Value)
+	}
+
 }
