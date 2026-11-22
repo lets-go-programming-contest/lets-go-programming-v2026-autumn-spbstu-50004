@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -25,8 +26,12 @@ func Load(path string) (Config, error) {
 		return Config{}, fmt.Errorf("parse config: %w", err)
 	}
 
-	if cfg.InputFile == "" || cfg.OutputFile == "" {
-		return Config{}, fmt.Errorf("input-file and output-file must be set")
+	if strings.TrimSpace(cfg.InputFile) == "" {
+		return Config{}, fmt.Errorf("input-file is empty")
+	}
+
+	if strings.TrimSpace(cfg.OutputFile) == "" {
+		return Config{}, fmt.Errorf("output-file is empty")
 	}
 
 	return cfg, nil

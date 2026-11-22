@@ -1,45 +1,3 @@
-package valcurs
-
-import (
-	"bytes"
-	"encoding/xml"
-	"fmt"
-	"os"
-	"strconv"
-	"strings"
-	"sort"
-
-	"golang.org/x/net/html/charset"
-)
-
-type CurrencyValue float64
-
-func (v *CurrencyValue) UnmarshalText(data []byte) error {
-	value := strings.TrimSpace(string(data))
-	value = strings.ReplaceAll(value, ",", ".")
-
-	number, err := strconv.ParseFloat(value, 64)
-	if err != nil {
-		return fmt.Errorf("parse currency value: %w", err)
-	}
-
-	*v = CurrencyValue(number)
-	return nil
-}
-
-
-type Valute struct {
-    NumCode  int           `xml:"NumCode" json:"num_code"`
-    CharCode string        `xml:"CharCode" json:"char_code"`
-    Value    CurrencyValue `xml:"Value" json:"value"`
-}
-
-
-type ValCurs struct {
-	XMLName xml.Name `xml:"ValCurs"`
-	Valutes []Valute `xml:"Valute"`
-}
-
 func Load(path string) (ValCurs, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -56,13 +14,23 @@ func Load(path string) (ValCurs, error) {
 		return ValCurs{}, fmt.Errorf("decode XML: %w", err)
 	}
 
-	return currencies, nil
-
-
-	func SortByValue(valutes []Valute) {
-    	sort.Slice(valutes, func(i, j int) bool {
-        	return valutes[i].Value > valutes[j].Value
-    	})
+	if len(currencies.Valutes) == 0 {
+		return ValCurs{}, fmt.Errorf("XML contains no currencies")
 	}
 
+	for i, currency := range currencies.Valutes {
+		if currency.NumCode <= 0 {
+			return ValCurs{}, fmt.Errorf("invalid NumCode at currency %d", i+1)
+		}
+
+		if strings.TrimSpace(currency.CharCode) == "" {
+			return ValCurs{}, fmt.Errorf("empty CharCode at currency %d", i+1)
+		}
+
+		if currency.Value <= 0 {
+			return ValCurs{}, fmt.Errorf("invalid Value at currency %d", i+1)
+		}
+	}
+
+	return currencies, nil
 }
