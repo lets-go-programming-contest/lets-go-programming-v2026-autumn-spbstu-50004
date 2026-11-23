@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+
 	"task-2-2/internal/intheap"
 )
 
@@ -44,7 +45,7 @@ func main() {
 	}
 
 	if targetRankIndex <= 0 || targetRankIndex > customMaxHeap.Len() {
-		log.Println(fmt.Errorf("%w: rank %d for heap length %d", errTargetRankOutOfBounds, targetRankIndex, customMaxHeap.Len()))
+		log.Println(fmt.Errorf("%w: rank %d, len %d", errTargetRankOutOfBounds, targetRankIndex, customMaxHeap.Len()))
 
 		return
 	}
