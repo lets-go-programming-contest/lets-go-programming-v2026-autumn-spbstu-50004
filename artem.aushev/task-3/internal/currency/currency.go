@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"os"
+	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
@@ -57,6 +58,11 @@ func SortByValueDesc(currencies []Valute) {
 }
 
 func SaveJSON(filePath string, currencies []Valute) error {
+	outputDir := filepath.Dir(filePath)
+	if mkdirError := os.MkdirAll(outputDir, 0755); mkdirError != nil {
+		return fmt.Errorf("failed to create output directory %q: %w", outputDir, mkdirError)
+	}
+
 	jsonBytes, marshalError := json.MarshalIndent(currencies, "", "  ")
 	if marshalError != nil {
 		return fmt.Errorf("failed to marshal currencies to JSON: %w", marshalError)
