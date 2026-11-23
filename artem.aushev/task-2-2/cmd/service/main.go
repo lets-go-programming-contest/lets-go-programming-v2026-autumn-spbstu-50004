@@ -4,7 +4,6 @@ import (
 	"container/heap"
 	"fmt"
 	"log"
-	"os"
 
 	"task-2-2/internal/intheap"
 )
