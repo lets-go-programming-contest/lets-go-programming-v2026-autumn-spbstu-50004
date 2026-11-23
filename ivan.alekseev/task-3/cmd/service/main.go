@@ -9,8 +9,10 @@ import (
 	"github.com/ivan.alekseev/task-3/internal/valcurs"
 )
 
+const defaultConfigFile = "config.yaml"
+
 func main() {
-	configPath := flag.String("config", "config.yaml", "path to config file")
+	configPath := flag.String("config", defaultConfigFile, "path to config file")
 
 	flag.Parse()
 
