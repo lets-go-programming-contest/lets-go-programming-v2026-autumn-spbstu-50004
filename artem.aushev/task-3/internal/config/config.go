@@ -19,6 +19,7 @@ func Load(filePath string) (*Config, error) {
 	}
 
 	var parsedConfig Config
+
 	if unmarshalError := yaml.Unmarshal(fileBytes, &parsedConfig); unmarshalError != nil {
 		return nil, fmt.Errorf("failed to parse YAML config from %q: %w", filePath, unmarshalError)
 	}

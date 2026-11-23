@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"sort"
@@ -18,10 +19,10 @@ type ValCurs struct {
 }
 
 type Valute struct {
-	NumCode  int     `xml:"NumCode" json:"num_code"`
-	CharCode string  `xml:"CharCode" json:"char_code"`
-	ValueRaw string  `xml:"Value" json:"-"`
-	Value    float64 `xml:"-" json:"value"`
+	NumCode  int     `json:"num_code"  xml:"NumCode"`
+	CharCode string  `json:"char_code" xml:"CharCode"`
+	ValueRaw string  `json:"-"         xml:"Value"`
+	Value    float64 `json:"value"     xml:"-"`
 }
 
 func ParseXML(filePath string) ([]Valute, error) {
@@ -29,23 +30,32 @@ func ParseXML(filePath string) ([]Valute, error) {
 	if openError != nil {
 		return nil, fmt.Errorf("failed to open XML file %q: %w", filePath, openError)
 	}
-	defer xmlFile.Close()
+
+	defer func() {
+		if closeError := xmlFile.Close(); closeError != nil {
+			log.Println(fmt.Errorf("failed to close XML file %q: %w", filePath, closeError))
+		}
+	}()
 
 	decoder := xml.NewDecoder(xmlFile)
 	decoder.CharsetReader = charset.NewReaderLabel
 
 	var catalog ValCurs
+
 	if decodeError := decoder.Decode(&catalog); decodeError != nil {
 		return nil, fmt.Errorf("failed to decode XML from %q: %w", filePath, decodeError)
 	}
 
 	for index := range catalog.Valutes {
-		normalizedValue := strings.ReplaceAll(catalog.Valutes[index].ValueRaw, ",", ".")
+		valute := &catalog.Valutes[index]
+		normalizedValue := strings.ReplaceAll(valute.ValueRaw, ",", ".")
+
 		parsedFloat, parseError := strconv.ParseFloat(normalizedValue, 64)
 		if parseError != nil {
-			return nil, fmt.Errorf("failed to parse value %q for currency %s: %w", catalog.Valutes[index].ValueRaw, catalog.Valutes[index].CharCode, parseError)
+			return nil, fmt.Errorf("failed to parse value %q for %s: %w", valute.ValueRaw, valute.CharCode, parseError)
 		}
-		catalog.Valutes[index].Value = parsedFloat
+
+		valute.Value = parsedFloat
 	}
 
 	return catalog.Valutes, nil
@@ -59,7 +69,8 @@ func SortByValueDesc(currencies []Valute) {
 
 func SaveJSON(filePath string, currencies []Valute) error {
 	outputDir := filepath.Dir(filePath)
-	if mkdirError := os.MkdirAll(outputDir, 0755); mkdirError != nil {
+
+	if mkdirError := os.MkdirAll(outputDir, 0o750); mkdirError != nil {
 		return fmt.Errorf("failed to create output directory %q: %w", outputDir, mkdirError)
 	}
 
@@ -68,7 +79,7 @@ func SaveJSON(filePath string, currencies []Valute) error {
 		return fmt.Errorf("failed to marshal currencies to JSON: %w", marshalError)
 	}
 
-	if writeError := os.WriteFile(filePath, jsonBytes, 0644); writeError != nil {
+	if writeError := os.WriteFile(filePath, jsonBytes, 0o600); writeError != nil {
 		return fmt.Errorf("failed to write JSON to %q: %w", filePath, writeError)
 	}
 
