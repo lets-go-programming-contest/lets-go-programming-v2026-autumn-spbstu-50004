@@ -3,13 +3,11 @@ package valcurs
 import (
 	"encoding/json"
 	"encoding/xml"
-	"errors"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"sort"
-	"strings"
 
 	"golang.org/x/text/encoding/charmap"
 )
@@ -19,22 +17,13 @@ const (
 	outputDirPerm  = 0o755
 )
 
-var errUnknownCharset = errors.New("unknown charset")
-
 type ValCurs struct {
 	XMLName xml.Name `xml:"ValCurs"`
 	Valutes []Valute `xml:"Valute"`
 }
 
 func CharsetReader(charset string, input io.Reader) (io.Reader, error) {
-	switch strings.ToLower(charset) {
-	case "utf-8", "ascii":
-		return input, nil
-	case "windows-1251":
-		return charmap.Windows1251.NewDecoder().Reader(input), nil
-	default:
-		return nil, errUnknownCharset
-	}
+	return charmap.Windows1251.NewDecoder().Reader(input), nil
 }
 
 func NewValCurs(sourceFile *os.File) (ValCurs, error) {
