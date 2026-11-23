@@ -14,6 +14,11 @@ import (
 	"golang.org/x/net/html/charset"
 )
 
+const (
+	dirPermissions  = 0o750
+	filePermissions = 0o600
+)
+
 type ValCurs struct {
 	Valutes []Valute `xml:"Valute"`
 }
@@ -70,7 +75,7 @@ func SortByValueDesc(currencies []Valute) {
 func SaveJSON(filePath string, currencies []Valute) error {
 	outputDir := filepath.Dir(filePath)
 
-	if mkdirError := os.MkdirAll(outputDir, 0o750); mkdirError != nil {
+	if mkdirError := os.MkdirAll(outputDir, dirPermissions); mkdirError != nil {
 		return fmt.Errorf("failed to create output directory %q: %w", outputDir, mkdirError)
 	}
 
@@ -79,7 +84,7 @@ func SaveJSON(filePath string, currencies []Valute) error {
 		return fmt.Errorf("failed to marshal currencies to JSON: %w", marshalError)
 	}
 
-	if writeError := os.WriteFile(filePath, jsonBytes, 0o600); writeError != nil {
+	if writeError := os.WriteFile(filePath, jsonBytes, filePermissions); writeError != nil {
 		return fmt.Errorf("failed to write JSON to %q: %w", filePath, writeError)
 	}
 
