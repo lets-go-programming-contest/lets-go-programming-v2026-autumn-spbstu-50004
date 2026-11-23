@@ -1,6 +1,7 @@
 package rates
 
 import (
+	"bytes"
 	"encoding/xml"
 	"fmt"
 	"os"
@@ -30,13 +31,12 @@ type xmlValute struct {
 }
 
 func FetchSortedRates(xmlPath string) ([]Rate, error) {
-	file, err := os.Open(filepath.Clean(xmlPath))
+	rawBytes, err := os.ReadFile(filepath.Clean(xmlPath))
 	if err != nil {
-		return nil, fmt.Errorf("open xml source: %w", err)
+		return nil, fmt.Errorf("read xml source: %w", err)
 	}
-	defer file.Close()
 
-	decoder := xml.NewDecoder(file)
+	decoder := xml.NewDecoder(bytes.NewReader(rawBytes))
 	decoder.CharsetReader = charset.NewReaderLabel
 
 	var curs xmlValCurs
@@ -45,6 +45,7 @@ func FetchSortedRates(xmlPath string) ([]Rate, error) {
 	}
 
 	rates := make([]Rate, 0, len(curs.Items))
+
 	for _, item := range curs.Items {
 		rate, err := convertItem(item)
 		if err != nil {
@@ -75,6 +76,7 @@ func convertItem(item xmlValute) (Rate, error) {
 	}
 
 	valStr := strings.ReplaceAll(strings.TrimSpace(item.Value), ",", ".")
+
 	val, err := strconv.ParseFloat(valStr, 64)
 	if err != nil {
 		return Rate{}, fmt.Errorf("invalid currency value %q: %w", item.Value, err)
