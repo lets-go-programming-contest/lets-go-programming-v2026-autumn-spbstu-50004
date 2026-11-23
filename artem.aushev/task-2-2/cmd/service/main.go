@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	"task-2-2/internal/intheap"
+	"://github.com"
 )
 
 var (
